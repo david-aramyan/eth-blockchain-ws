@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Artisan;
 
 class collectBlocks extends Command
 {
+    const TIMEOUT = 60;
+    const SUBSCRIBE_METHOD = "eth_subscribe";
+
     /**
      * The name and signature of the console command.
      *
@@ -43,11 +46,11 @@ class collectBlocks extends Command
     public function handle()
     {
         $config = new ClientConfig();
-        $config->setTimeout(60);
+        $config->setTimeout(self::TIMEOUT);
 
         try {
-            $client = new WebSocketClient('wss://mainnet.infura.io/ws/v3/'.env('INFURA_API_KEY'), $config);
-            $client->send('{"jsonrpc":"2.0", "id": 1, "method": "eth_subscribe", "params": ["newHeads"]}');
+            $client = new WebSocketClient(env('INFURA_API_ENDPOINT').env('INFURA_API_KEY'), $config);
+            $client->send('{"jsonrpc":"2.0", "id": 1, "method": "'.self::SUBSCRIBE_METHOD.'", "params": ["newHeads"]}');
 
             while ($client->isConnected()) {
                 $response = $client->receive();

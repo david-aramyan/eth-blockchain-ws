@@ -9,6 +9,9 @@ use WSSC\WebSocketClient;
 
 class collectTransactions extends Command
 {
+    const TIMEOUT = 60;
+    const GET_BLOCK_METHOD = "eth_getBlockByHash";
+
     /**
      * The name and signature of the console command.
      *
@@ -42,11 +45,11 @@ class collectTransactions extends Command
     {
         $block_hash = $this->argument('hash');
         $config = new ClientConfig();
-        $config->setTimeout(60);
+        $config->setTimeout(self::TIMEOUT);
 
         try {
-            $client = new WebSocketClient('wss://mainnet.infura.io/ws/v3/'.env('INFURA_API_KEY'), $config);
-            $client->send('{"jsonrpc":"2.0","method":"eth_getBlockByHash","params": ["'.$block_hash.'",false],"id":1}');
+            $client = new WebSocketClient(env('INFURA_API_ENDPOINT').env('INFURA_API_KEY'), $config);
+            $client->send('{"jsonrpc":"2.0","method":"'.self::GET_BLOCK_METHOD.'","params": ["'.$block_hash.'",false],"id":1}');
 
             if ($client->isConnected()) {
                 $response = $client->receive();

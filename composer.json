@@ -16,7 +16,7 @@
         "predis/predis": "^1.1",
         "ratchet/pawl": "^0.3.4",
         "react/event-loop": "^1.1",
-        "react/http": "^0.8.4",
+        "react/http": "^1.7.0",
         "sc0vu/web3.php": "dev-master",
         "tivoka/tivoka": "^3.5"
     },
